@@ -1,13 +1,10 @@
-import mysql from 'mysql2/promise';
+import { Pool } from 'pg';
 
 // Database configuration
 const dbConfig = {
-  host: process.env.REACT_APP_DB_HOST,
-  username: process.env.REACT_APP_DB_USERNAME,
-  password: process.env.REACT_APP_DB_PASSWORD,
-  database: process.env.REACT_APP_DB_NAME,
+  connectionString: process.env.REACT_APP_DATABASE_URL,
   ssl: {
-    rejectUnauthorized: true
+    rejectUnauthorized: false
   }
 };
 
@@ -16,7 +13,7 @@ let pool;
 
 const getConnection = () => {
   if (!pool) {
-    pool = mysql.createPool(dbConfig);
+    pool = new Pool(dbConfig);
   }
   return pool;
 };
@@ -25,37 +22,38 @@ const getConnection = () => {
 export const booksAPI = {
   async getAll() {
     const connection = getConnection();
-    const [rows] = await connection.execute('SELECT * FROM books ORDER BY created_at DESC');
-    return rows;
+    const result = await connection.query('SELECT * FROM books ORDER BY created_at DESC');
+    return result.rows;
   },
 
   async create(book) {
     const connection = getConnection();
-    const [result] = await connection.execute(
-      `INSERT INTO books (id, title, author, isbn, description, published_date, image_url, genre, is_available, source_url)
-       VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    const result = await connection.query(
+      `INSERT INTO books (title, author, isbn, description, published_date, image_url, genre, is_available, source_url)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [book.title, book.author, book.isbn, book.description, book.published_date, book.image_url, book.genre, book.is_available, book.source_url]
     );
-    return { id: result.insertId, ...book };
+    return result.rows[0];
   },
 
   async update(id, updates) {
     const connection = getConnection();
-    const setClause = Object.keys(updates).map(key => `${key} = ?`).join(', ');
+    const keys = Object.keys(updates);
+    const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
     const values = Object.values(updates);
 
-    await connection.execute(
-      `UPDATE books SET ${setClause}, updated_at = NOW() WHERE id = ?`,
+    await connection.query(
+      `UPDATE books SET ${setClause}, updated_at = NOW() WHERE id = $${keys.length + 1}`,
       [...values, id]
     );
 
-    const [rows] = await connection.execute('SELECT * FROM books WHERE id = ?', [id]);
-    return rows[0];
+    const result = await connection.query('SELECT * FROM books WHERE id = $1', [id]);
+    return result.rows[0];
   },
 
   async delete(id) {
     const connection = getConnection();
-    await connection.execute('DELETE FROM books WHERE id = ?', [id]);
+    await connection.query('DELETE FROM books WHERE id = $1', [id]);
     return { success: true };
   }
 };
@@ -64,37 +62,38 @@ export const booksAPI = {
 export const usersAPI = {
   async getAll() {
     const connection = getConnection();
-    const [rows] = await connection.execute('SELECT * FROM users ORDER BY created_at DESC');
-    return rows;
+    const result = await connection.query('SELECT * FROM users ORDER BY created_at DESC');
+    return result.rows;
   },
 
   async create(user) {
     const connection = getConnection();
-    const [result] = await connection.execute(
-      `INSERT INTO users (id, name, email, phone, registration_date)
-       VALUES (UUID(), ?, ?, ?, NOW())`,
+    const result = await connection.query(
+      `INSERT INTO users (name, email, phone, registration_date)
+       VALUES ($1, $2, $3, NOW()) RETURNING *`,
       [user.name, user.email, user.phone]
     );
-    return { id: result.insertId, ...user };
+    return result.rows[0];
   },
 
   async update(id, updates) {
     const connection = getConnection();
-    const setClause = Object.keys(updates).map(key => `${key} = ?`).join(', ');
+    const keys = Object.keys(updates);
+    const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
     const values = Object.values(updates);
 
-    await connection.execute(
-      `UPDATE users SET ${setClause}, updated_at = NOW() WHERE id = ?`,
+    await connection.query(
+      `UPDATE users SET ${setClause}, updated_at = NOW() WHERE id = $${keys.length + 1}`,
       [...values, id]
     );
 
-    const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [id]);
-    return rows[0];
+    const result = await connection.query('SELECT * FROM users WHERE id = $1', [id]);
+    return result.rows[0];
   },
 
   async delete(id) {
     const connection = getConnection();
-    await connection.execute('DELETE FROM users WHERE id = ?', [id]);
+    await connection.query('DELETE FROM users WHERE id = $1', [id]);
     return { success: true };
   }
 };
