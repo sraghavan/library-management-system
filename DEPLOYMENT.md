@@ -16,7 +16,7 @@
 
 ```bash
 # Add your GitHub repository as remote
-git remote add origin https://github.com/YOUR_USERNAME/library-management-system.git
+git remote add origin https://github.com/sraghavan/library-management-system.git
 
 # Push to GitHub
 git push -u origin main
