@@ -1,46 +1,101 @@
-# Getting Started with Create React App
+# 📚 Personal Library Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React-based library management system for tracking your personal book collection and managing borrowers.
+
+## Features
+
+- 📖 **Book Management**: Add books manually or by URL (Amazon, Goodreads, etc.)
+- 👥 **User Management**: Simple user registration and management
+- 🔄 **Borrowing System**: Track who has borrowed which books and when
+- 🔍 **Search & Filter**: Find books by title, author, or availability status
+- 💾 **Local Storage**: All data is saved locally in your browser
+- 📱 **Responsive Design**: Works perfectly on desktop and mobile devices
+
+## Getting Started
+
+### Prerequisites
+- Node.js (version 14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository or navigate to the project directory
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## How to Use
+
+### Adding Books
+
+1. **From URL**: Click "Add New Book" and paste a URL from Amazon, Goodreads, or other book sites. The system will automatically extract book details.
+2. **Manually**: Fill in the book details manually in the form.
+
+### Managing Users
+
+1. Go to the "Users" page to see all registered members
+2. Users can register themselves via the "Register" page
+3. View borrowing history and current borrowed books for each user
+
+### Borrowing & Returning Books
+
+1. On the Books page, select a user from the dropdown for available books to assign them
+2. For borrowed books, click "Mark as Returned" to return them to the library
+
+### Features Overview
+
+- **Books Page**: View all books, search, filter by availability
+- **Users Page**: Manage library members and see their borrowing status
+- **Register Page**: Allow new users to self-register
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it.
 
 ### `npm run build`
+Builds the app for production to the `build` folder.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `npm test`
+Launches the test runner in interactive watch mode.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technology Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Frontend**: React 18 with TypeScript
+- **Routing**: React Router DOM
+- **State Management**: React Context + useReducer
+- **Storage**: Local Storage for data persistence
+- **Styling**: CSS3 with modern design patterns
+- **Metadata Extraction**: Custom URL parser for book details
 
-### `npm run eject`
+## Data Storage
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Current**: All data is stored locally in your browser's localStorage.
+**Upcoming**: Integration with Supabase database for cloud storage and multi-device sync.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**LocalStorage features**:
+- No server setup required
+- Data persists between sessions
+- Each browser/device has its own data
+- Excel import/export for data backup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Deployment
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Ready for deployment on Vercel with zero configuration.
+Live demo: Coming soon!
 
-## Learn More
+## Browser Compatibility
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Works on all modern browsers including:
+- Chrome 70+
+- Firefox 65+
+- Safari 12+
+- Edge 79+
