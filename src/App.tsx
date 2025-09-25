@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { LibraryProvider } from './context/LibraryContext';
 import BooksPage from './pages/BooksPage';
 import UsersPage from './pages/UsersPage';
+import { DatabaseTest } from './components/DatabaseTest';
 import './App.css';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <LibraryProvider>
       <Router>
         <div className="App">
+          <DatabaseTest />
           <Routes>
             <Route path="/" element={<BooksPage />} />
             <Route path="/users" element={<UsersPage />} />
